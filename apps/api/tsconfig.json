@@ -1,0 +1,35 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "ES2021",
+
+    "rootDir": "./src",
+    "outDir": "./dist",
+
+    "declaration": true,
+    "sourceMap": true,
+    "removeComments": true,
+
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+
+    "baseUrl": "./",
+
+    "incremental": false,
+
+    "skipLibCheck": true,
+
+    "strictNullChecks": false,
+    "noImplicitAny": false,
+    "strictBindCallApply": false,
+    "forceConsistentCasingInFileNames": false,
+    "noFallthroughCasesInSwitch": false,
+
+    "paths": {
+      "@sokoza/types": ["../../packages/types/dist"],
+      "@sokoza/config": ["../../packages/config/dist"],
+      "@sokoza/validation": ["../../packages/validation/dist"]
+    }
+  }
+}
