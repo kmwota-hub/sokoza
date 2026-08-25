@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "workspaces": [
+    "apps/*",
     "packages/*"
   ],
   "description": "SOKOZA - Shop Local. Get It Delivered. Production local marketplace and delivery platform.",
