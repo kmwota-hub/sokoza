@@ -2,6 +2,9 @@
   "name": "sokoza",
   "version": "1.0.0",
   "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
   "description": "SOKOZA - Shop Local. Get It Delivered. Production local marketplace and delivery platform.",
   "scripts": {
     "dev:api": "npm run build:packages && cd apps/api && npm run start:dev",
