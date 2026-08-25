@@ -7,18 +7,19 @@ export default function Landing() {
   const [apiHealth, setApiHealth] = useState<{ status: string; service: string; location: string } | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetch('/api/v1/health')
-      .then((res) => res.json())
-      .then((data) => {
-        setApiHealth(data);
-        setLoading(false);
-      })
-      .catch(() => {
-        setLoading(false);
-      });
-  }, []);
+useEffect(() => {
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
 
+  fetch(`${API_BASE_URL}/api/v1/health`)
+    .then((res) => res.json())
+    .then((data) => {
+      setApiHealth(data);
+      setLoading(false);
+    })
+    .catch(() => {
+      setLoading(false);
+    });
+}, []);
   return (
     <div className="space-y-12">
       <div className="text-center space-y-4">

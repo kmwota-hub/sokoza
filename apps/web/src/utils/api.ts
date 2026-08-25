@@ -1,4 +1,6 @@
-﻿export async function apiFetch(endpoint: string, options: RequestInit = {}) {
+﻿const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
+
+export async function apiFetch(endpoint: string, options: RequestInit = {}) {
   const token = localStorage.getItem('sokoza_token');
   const headers = new Headers(options.headers || {});
 
@@ -10,13 +12,18 @@
     headers.set('Content-Type', 'application/json');
   }
 
-  const response = await fetch(endpoint, {
+  const url = endpoint.startsWith('http')
+    ? endpoint
+    : `${API_BASE_URL}${endpoint}`;
+
+  const response = await fetch(url, {
     ...options,
     headers,
   });
 
   const text = await response.text();
   let data;
+
   try {
     data = text ? JSON.parse(text) : {};
   } catch {
