@@ -25,6 +25,7 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
+    "@nestjs/cli": "^10.3.0",
     "@prisma/client": "^5.22.0"
   }
 }
