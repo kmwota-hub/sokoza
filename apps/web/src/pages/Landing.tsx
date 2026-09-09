@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ShoppingBag, Truck, Store, CheckCircle2, ShieldCheck } from 'lucide-react';
 import { APP_CONFIG } from '@sokoza/config';
 import { Link } from 'react-router-dom';
@@ -40,7 +40,7 @@ useEffect(() => {
       </div>
 
       {/* System Ecosystem Cards */}
-      <div className="grid md:grid-cols-3 gap-6">
+      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
         <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition">
           <div className="w-12 h-12 bg-brand-50 rounded-lg flex items-center justify-center mb-4 text-brand-600">
             <ShoppingBag className="w-6 h-6" />
@@ -77,6 +77,19 @@ useEffect(() => {
           </p>
           <Link to="/rider/dashboard" className="text-amber-600 hover:text-amber-700 font-semibold text-sm">
             Go to Rider Portal &rarr;
+          </Link>
+        </div>
+
+        <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition">
+          <div className="w-12 h-12 bg-red-50 rounded-lg flex items-center justify-center mb-4 text-red-600">
+            <ShieldCheck className="w-6 h-6" />
+          </div>
+          <h3 className="font-bold text-gray-900 text-lg mb-1">Administrators</h3>
+          <p className="text-sm text-gray-600 mb-4">
+            Manage stores, users, promotion levels, and audit live deliveries across the platform.
+          </p>
+          <Link to="/admin/dashboard" className="text-red-600 hover:text-red-700 font-semibold text-sm">
+            Go to Admin Dashboard &rarr;
           </Link>
         </div>
       </div>

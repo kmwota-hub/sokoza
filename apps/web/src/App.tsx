@@ -1,4 +1,4 @@
-﻿            import { BrowserRouter, Routes, Route } from 'react-router-dom';
+            import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Layout from './components/Layout';
 import Landing from './pages/Landing';
 import Login from './pages/Login';
@@ -6,6 +6,7 @@ import Register from './pages/Register';
 import CustomerDashboard from './pages/CustomerDashboard';
 import BusinessDashboard from './pages/BusinessDashboard';
 import RiderDashboard from './pages/RiderDashboard';
+import AdminDashboard from './pages/AdminDashboard';
 
 export default function App() {
   return (
@@ -18,6 +19,7 @@ export default function App() {
           <Route path="dashboard" element={<CustomerDashboard />} />
           <Route path="business/dashboard" element={<BusinessDashboard />} />
           <Route path="rider/dashboard" element={<RiderDashboard />} />
+          <Route path="admin/dashboard" element={<AdminDashboard />} />
         </Route>
       </Routes>
     </BrowserRouter>

@@ -102,6 +102,7 @@ export class OrdersService {
         business: { select: { businessName: true, slug: true, logo: true } },
         items: true,
         address: true,
+        reviews: true,
       },
       orderBy: { createdAt: 'desc' },
     });
