@@ -1,4 +1,4 @@
-﻿import React, { createContext, useContext, useState, useEffect } from 'react';
+﻿import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { apiFetch } from '../utils/api';
 
 interface User {
@@ -20,9 +20,18 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return false;
+    return !!window.localStorage.getItem('sokoza_token');
+  });
 
-  const fetchCurrentUser = async () => {
+  const logout = () => {
+    localStorage.removeItem('sokoza_token');
+    setUser(null);
+    setLoading(false);
+  };
+
+  const fetchCurrentUser = useCallback(async () => {
     try {
       const data = await apiFetch('/api/v1/auth/me');
       setUser(data);
@@ -31,27 +40,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   const login = async (token: string) => {
     localStorage.setItem('sokoza_token', token);
+    setLoading(true);
     await fetchCurrentUser();
-  };
-
-  const logout = () => {
-    localStorage.removeItem('sokoza_token');
-    setUser(null);
-    setLoading(false);
   };
 
   useEffect(() => {
     const token = localStorage.getItem('sokoza_token');
     if (token) {
-      fetchCurrentUser();
+      void fetchCurrentUser();
     } else {
       setLoading(false);
     }
-  }, []);
+  }, [fetchCurrentUser]);
 
   return (
     <AuthContext.Provider value={{ user, loading, login, logout }}>

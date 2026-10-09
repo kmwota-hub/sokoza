@@ -14,8 +14,6 @@
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
 
-    "baseUrl": "./",
-
     "incremental": false,
 
     "skipLibCheck": true,

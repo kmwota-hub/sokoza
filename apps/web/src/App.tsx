@@ -3,6 +3,8 @@ import Layout from './components/Layout';
 import Landing from './pages/Landing';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
 import CustomerDashboard from './pages/CustomerDashboard';
 import BusinessDashboard from './pages/BusinessDashboard';
 import RiderDashboard from './pages/RiderDashboard';
@@ -16,6 +18,8 @@ export default function App() {
           <Route index element={<Landing />} />
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
+          <Route path="forgot-password" element={<ForgotPassword />} />
+          <Route path="reset-password" element={<ResetPassword />} />
           <Route path="dashboard" element={<CustomerDashboard />} />
           <Route path="business/dashboard" element={<BusinessDashboard />} />
           <Route path="rider/dashboard" element={<RiderDashboard />} />

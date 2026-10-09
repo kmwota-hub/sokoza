@@ -3,19 +3,24 @@
   ConflictException,
   UnauthorizedException,
   NotFoundException,
+  BadRequestException,
+  ServiceUnavailableException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
+import { createHash, randomBytes } from 'crypto';
 import { PrismaService } from '../database/prisma.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import { RoleName } from '@prisma/client';
+import { PasswordResetEmailService } from './password-reset-email.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private prisma: PrismaService,
     private jwtService: JwtService,
+    private passwordResetEmailService: PasswordResetEmailService,
   ) {}
 
   async register(dto: RegisterDto) {
@@ -106,6 +111,77 @@ export class AuthService {
     } catch {
       throw new UnauthorizedException('Invalid or expired refresh token');
     }
+  }
+
+  async requestPasswordReset(email: string) {
+    const appUrl = process.env.APP_URL;
+    if (!appUrl) {
+      throw new ServiceUnavailableException('APP_URL must be configured to send password reset links');
+    }
+    this.passwordResetEmailService.assertConfigured();
+
+    const user = await this.prisma.user.findUnique({
+      where: { email: email.trim() },
+      select: { id: true, email: true, firstName: true },
+    });
+
+    if (!user) {
+      return { message: 'If an account exists for that email, a reset link will be sent.' };
+    }
+
+    const token = randomBytes(32).toString('hex');
+    const tokenHash = createHash('sha256').update(token).digest('hex');
+    const expiresAt = new Date(Date.now() + 60 * 60 * 1000);
+
+    await this.prisma.user.update({
+      where: { id: user.id },
+      data: {
+        passwordResetTokenHash: tokenHash,
+        passwordResetExpiresAt: expiresAt,
+      },
+    });
+
+    const resetUrl = new URL('/reset-password', appUrl);
+    resetUrl.searchParams.set('token', token);
+    await this.passwordResetEmailService.sendPasswordResetEmail(
+      user.email,
+      user.firstName,
+      resetUrl.toString(),
+    );
+
+    return { message: 'If an account exists for that email, a reset link will be sent.' };
+  }
+
+  async resetPassword(token: string, password: string) {
+    const tokenHash = createHash('sha256').update(token).digest('hex');
+    const user = await this.prisma.user.findUnique({
+      where: { passwordResetTokenHash: tokenHash },
+      select: { id: true, passwordResetExpiresAt: true },
+    });
+
+    if (!user || !user.passwordResetExpiresAt || user.passwordResetExpiresAt <= new Date()) {
+      throw new BadRequestException('Invalid or expired password reset link');
+    }
+
+    const passwordHash = await bcrypt.hash(password, 12);
+    const result = await this.prisma.user.updateMany({
+      where: {
+        id: user.id,
+        passwordResetTokenHash: tokenHash,
+        passwordResetExpiresAt: { gt: new Date() },
+      },
+      data: {
+        passwordHash,
+        passwordResetTokenHash: null,
+        passwordResetExpiresAt: null,
+      },
+    });
+
+    if (result.count !== 1) {
+      throw new BadRequestException('Invalid or expired password reset link');
+    }
+
+    return { message: 'Password has been reset successfully' };
   }
 
   async getMe(userId: string) {

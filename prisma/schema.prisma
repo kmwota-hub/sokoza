@@ -178,6 +178,8 @@ model User {
   email        String     @unique
   phone        String     @unique
   passwordHash String
+  passwordResetTokenHash String? @unique
+  passwordResetExpiresAt DateTime?
   profileImage String?
   status       UserStatus @default(ACTIVE)
 

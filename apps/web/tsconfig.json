@@ -15,9 +15,8 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"],
+      "@/*": ["./src/*"],
       "@sokoza/types": ["../../packages/types/src"],
       "@sokoza/config": ["../../packages/config/src"],
       "@sokoza/validation": ["../../packages/validation/src"]

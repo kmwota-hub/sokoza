@@ -16,6 +16,8 @@
     "build:web": "cd apps/web && npm run build",
     "build": "npm run build:packages && npm run build:api && npm run build:web",
     "test": "cd apps/api && npm run test",
+    "db:check": "npx prisma validate",
+    "db:prepare": "npx prisma generate && npx prisma migrate deploy",
     "prisma:generate": "npx prisma generate",
     "prisma:studio": "npx prisma studio"
   },

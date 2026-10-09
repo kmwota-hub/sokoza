@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { apiFetch } from '../utils/api';
 
 type Tab = 'stores' | 'users' | 'deliveries';
@@ -38,18 +38,18 @@ export default function AdminDashboard() {
     }
   };
 
-  const loadDataForTab = async (tab: Tab) => {
+  const loadDataForTab = useCallback(async (tab: Tab) => {
     setLoading(true);
     setError('');
     if (tab === 'stores') await loadStores();
     else if (tab === 'users') await loadUsers();
     else if (tab === 'deliveries') await loadDeliveries();
     setLoading(false);
-  };
+  }, []);
 
   useEffect(() => {
-    loadDataForTab(activeTab);
-  }, [activeTab]);
+    void loadDataForTab(activeTab);
+  }, [activeTab, loadDataForTab]);
 
   const updateStoreStatus = async (id: string, currentStatus: string) => {
     const nextStatus = currentStatus === 'ACTIVE' ? 'SUSPENDED' : 'ACTIVE';
